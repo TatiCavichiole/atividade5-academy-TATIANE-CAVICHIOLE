@@ -17,6 +17,7 @@ describe("Criar usuario", function () {
       cy.get(".go3958317564")
         .should("be.visible")
         .and("have.text", "Usuário salvo com sucesso!");
+
       emailCadastrado = email;
       cy.log(emailCadastrado);
     });
@@ -75,7 +76,7 @@ describe("Criar usuario", function () {
         .should("be.visible")
         .and("have.text", "Informe pelo menos 4 letras para o nome.");
     });
-    it.only("Nao deve ser possivel cadastrar usuario com campo nome vazio", function () {
+    it("Nao deve ser possivel cadastrar usuario com campo nome vazio", function () {
       paginaRegistro.getNovo();
       paginaRegistro.typeEmail(email);
       paginaRegistro.clikButtonSalvar();
@@ -83,7 +84,7 @@ describe("Criar usuario", function () {
         .should("be.visible")
         .and("have.text", "O campo nome é obrigatório.");
     });
-    it.only("Nao deve ser possivel cadastrar usuario com campo email vazio", function () {
+    it("Nao deve ser possivel cadastrar usuario com campo email vazio", function () {
       paginaRegistro.getNovo();
       paginaRegistro.typeNome(name);
       paginaRegistro.clikButtonSalvar();
