@@ -6,7 +6,7 @@ describe("Criar usuario", function () {
   const email = faker.internet.email();
   let emailCadastrado;
   beforeEach(function () {
-    cy.visit("https://rarocrud-frontend-88984f6e4454.herokuapp.com/users");
+    cy.visit("/users");
   });
   describe("Registro de usuario com sucesso", function () {
     it("cadastrar usuario com credenciais validas", function () {
@@ -37,9 +37,34 @@ describe("Criar usuario", function () {
       paginaRegistro.typeNome(name);
       paginaRegistro.typeEmail(emailCadastrado);
       paginaRegistro.clikButtonSalvar();
-      cy.get(".sc-dCFHLb")
+      cy.contains("Este e-mail já é utilizado por outro usuário.").should(
+        "exist"
+      );
+
+      cy.get("button.sc-lcIPJg.ifkIA-D").click();
+    });
+    it("Nao deve ser possivel cadastrar um nome com mais de 100 caracteres", function () {
+      paginaRegistro.getNovo();
+      paginaRegistro.typeNome(
+        name +
+          "abcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxyabcdefghijklmnopqrstuvwxy"
+      );
+      paginaRegistro.typeEmail(email);
+      paginaRegistro.clikButtonSalvar();
+      cy.get(".sc-cPiKLX.feFrSQ")
         .should("be.visible")
-        .and("<p>", "Este e-mail já é utilizado por outro usuário.");
+        .and("have.text", "Informe no máximo 100 caracteres para o nome");
+    });
+    it("Nao deve ser possivel cadastrar um email com mais de 60 caracteres", function () {
+      paginaRegistro.getNovo();
+      paginaRegistro.typeNome(name);
+      paginaRegistro.typeEmail(
+        "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl@raro.com"
+      );
+      paginaRegistro.clikButtonSalvar();
+      cy.get(".sc-cPiKLX.feFrSQ")
+        .should("be.visible")
+        .and("have.text", "Informe no máximo 60 caracteres para o e-mail");
     });
   });
 });
