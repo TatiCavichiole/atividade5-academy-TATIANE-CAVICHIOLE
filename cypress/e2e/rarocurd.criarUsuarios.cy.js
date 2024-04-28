@@ -99,7 +99,10 @@ describe("Criar usuario", function () {
 //   paginaRegistro.typeNome("bia");
 //   paginaRegistro.typeEmail("email");
 //   paginaRegistro.clikButtonSalvar();
-//   cy.get(".sc-cPiKLX.feFrSQ")
+//   cy.contains("sc-jEACwC.jCZyHj")
 //     .should("be.visible")
 //     .and("have.text", "Informe pelo menos 4 letras para o nome.");
+//   cy.contains("sc-jEACwC.jCZyHj")
+//     .should("be.visible")
+//     .and("have.text", "Formato de e-mail inválido");
 // });

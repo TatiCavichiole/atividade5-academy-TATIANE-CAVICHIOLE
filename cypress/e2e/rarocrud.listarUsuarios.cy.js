@@ -3,6 +3,18 @@ describe("Listar usuários", function () {
     cy.visit("/users");
   });
   describe("Deve ser possivel visualizar usuarios cadastrados", function () {
+    it.only("deve exibir toda as informações dos usuarios cadastrados", function () {
+      cy.intercept("GET", "/api/v1/users").as("exibirUsuario");
+      cy.get(".sc-bXCLTC.jykigL").should("be.visible");
+
+      cy.wait("@exibirUsuario").then(function (lista) {
+        expect(lista.response.body).to.be.an("Array");
+        cy.get(".sc-ikkxIA.iTvMOa").contains("Nome").should("be.visible");
+        cy.get("#userData").contains("E-mail").should("be.visible");
+        cy.get("#userDataDetalhe").should("be.visible");
+      });
+    });
+
     it("deve exibir opçao para cadastrar quando a lista de usuarios estiver vazia", function () {
       cy.intercept("GET", "/api/v1/users", {
         statusCode: 200,
@@ -15,18 +27,19 @@ describe("Listar usuários", function () {
       );
       cy.get(".sc-bmzYkS").click();
     });
-  });
-  it("deve exibir paginação quando tiver mais de 6 usuarios cadastrados", function () {
-    cy.intercept("GET", "/api/v1/users").as("listagemUsuario");
-    cy.contains(".sc-hmdomO.irtGmQ", "Anterior").should("be.visible");
-    cy.contains(".sc-hmdomO.irtGmQ", "Próxima").should("be.visible");
-    cy.wait("@listagemUsuario").then(function (resultado) {
-      expect(resultado.response.body).to.be.an("Array");
-      cy.get("#paginacaoAtual")
-        .invoke("text")
-        .then(function (paginas) {
-          cy.log(paginas);
-        });
+
+    it("deve exibir paginação quando tiver mais de 6 usuarios cadastrados", function () {
+      cy.intercept("GET", "/api/v1/users").as("listagemUsuario");
+      cy.contains(".sc-hmdomO.irtGmQ", "Anterior").should("be.visible");
+      cy.contains(".sc-hmdomO.irtGmQ", "Próxima").should("be.visible");
+      cy.wait("@listagemUsuario").then(function (resultado) {
+        expect(resultado.response.body).to.be.an("Array");
+        cy.get("#paginacaoAtual")
+          .invoke("text")
+          .then(function (paginas) {
+            cy.log(paginas);
+          });
+      });
     });
   });
 });
