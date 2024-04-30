@@ -1,17 +1,23 @@
+import ListarPage from "../support/pages/listarUsuarios.page";
 describe("Listar usuários", function () {
+  var paginaListar = new ListarPage();
   beforeEach(function () {
     cy.visit("/users");
   });
   describe("Deve ser possivel visualizar usuarios cadastrados", function () {
-    it.only("deve exibir toda as informações dos usuarios cadastrados", function () {
+    it("deve exibir toda as informações dos usuarios cadastrados", function () {
       cy.intercept("GET", "/api/v1/users").as("exibirUsuario");
-      cy.get(".sc-bXCLTC.jykigL").should("be.visible");
+      cy.get(paginaListar.listaUsuarios).should("be.visible");
 
       cy.wait("@exibirUsuario").then(function (lista) {
         expect(lista.response.body).to.be.an("Array");
-        cy.get(".sc-ikkxIA.iTvMOa").contains("Nome").should("be.visible");
-        cy.get("#userData").contains("E-mail").should("be.visible");
-        cy.get("#userDataDetalhe").should("be.visible");
+        cy.get(paginaListar.userDataDetalhes)
+          .contains("Nome")
+          .should("be.visible");
+        cy.get(paginaListar.userDataEmail)
+          .contains("E-mail")
+          .should("be.visible");
+        cy.get(paginaListar.buttonDetalhes).should("be.visible");
       });
     });
 
@@ -25,7 +31,7 @@ describe("Listar usuários", function () {
       cy.contains("Ops! Não existe nenhum usuário para ser exibido.").should(
         "exist"
       );
-      cy.get(".sc-bmzYkS").click();
+      cy.get(paginaListar.novoUsuario).should("be.visible");
     });
 
     it("deve exibir paginação quando tiver mais de 6 usuarios cadastrados", function () {

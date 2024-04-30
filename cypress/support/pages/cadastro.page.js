@@ -5,7 +5,7 @@ export default class CadastroPage {
   buttonSalvar = ".sc-dAlyuH";
   linkPaginaVoltar = '[href="/users"]';
   linkPaginaNovo = '[href="/users/novo"]';
-
+  cadastroSucesso = ".go3958317564";
   getNovo() {
     cy.get(this.linkPaginaNovo).click();
   }
@@ -18,4 +18,7 @@ export default class CadastroPage {
   clikButtonSalvar() {
     cy.get(this.buttonSalvar).click();
   }
+  // mensagemSucesso() {
+  //   cy.get(this.cadastroSucesso);
+  // }
 }
