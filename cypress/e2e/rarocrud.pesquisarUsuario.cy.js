@@ -19,11 +19,22 @@ describe("Pesquisar Usuario", function () {
     cy.get(".sc-dcJsrY.hcYPTs").should("be.visible");
     cy.get(".sc-gsFSXq.mUpIH").type(email);
     cy.wait(4000);
-
     cy.log(email);
-    cy.get("#listaUsuarios").contains(name);
-    cy.contains(".sc-dAbbOL.lcgSvJ", "E-mail").should("be.visible");
+    cy.get('[data-test="userDataName"]').contains(name);
+    cy.get('[data-test="userDataEmail"]').should(
+      "contain.text",
+      "E-mail",
+      email
+    );
     cy.get("#userDataDetalhe").should("be.visible");
     cy.get(".sc-fUnMCh.dttKkA").should("be.visible");
+  });
+  it("Deve ser possivel ver detalhes do usuario encontrado", function () {
+    cy.visit("/users");
+    cy.get(".sc-gsFSXq.mUpIH").type(email);
+    cy.get("#userDataDetalhe").should("be.visible").click();
+    cy.wait(4000);
+    cy.get(".sc-dLMFU.Mcjyi").should("be.visible");
+    //.and("contain.text", "E-mail", email);
   });
 });
