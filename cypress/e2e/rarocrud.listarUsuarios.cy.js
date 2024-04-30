@@ -1,5 +1,6 @@
 import ListarPage from "../support/pages/listarUsuarios.page";
 describe("Listar usuários", function () {
+  let totalDePaginas;
   var paginaListar = new ListarPage();
   beforeEach(function () {
     cy.visit("/users");
@@ -40,11 +41,14 @@ describe("Listar usuários", function () {
       cy.contains(".sc-hmdomO.irtGmQ", "Próxima").should("be.visible");
       cy.wait("@listagemUsuario").then(function (resultado) {
         expect(resultado.response.body).to.be.an("Array");
-        cy.get("#paginacaoAtual")
+        cy.get(paginaListar.paginacaoListaUsuarios)
           .invoke("text")
           .then(function (paginas) {
-            cy.log(paginas);
+            totalDePaginas = paginas;
+            cy.log(totalDePaginas);
           });
+        paginaListar.clikButtonProximo();
+        paginaListar.clikButtonVoltar();
       });
     });
   });
